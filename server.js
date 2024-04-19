@@ -19,6 +19,9 @@ const upload = multer({ dest: "uploads/" });
 app.use("/", emailSend);
 
 // Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:3000`);
-});
+// app.listen(PORT, () => {
+//   console.log(`Server is running on http://localhost:3000`);
+// });
+app.listen(5500,()=>{
+  console.log('server is running on 5000');
+})
