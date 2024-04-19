@@ -14,7 +14,7 @@ mongoose.connect("mongodb://localhost:27017/email-collection", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
-const upload = multer({ dest: "uploads/" });
+// const upload = multer({ dest: "uploads/" });
 
 app.use("/", emailSend);
 
