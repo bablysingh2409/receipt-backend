@@ -1,0 +1,80 @@
+const express = require("express");
+const router = express.Router();
+// const callbackController = require("../controller/mailController");
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
+const nodemailer = require('nodemailer');
+const fs = require('fs');
+
+
+require('dotenv').config();
+
+
+const smtpPassword = process.env.SMTP_PASSWORD;
+
+router.post("/request", upload.array("attachment"), async (req, res) => {
+  try {
+    const { expenditureType, amount,selectedDate,selectedGST } = req.body;
+    // console.log('file info...',req.file)
+    // const attachment = req.file; 
+    const attachments = req.files; // Array of attachments
+    
+
+    await sendEmailNotification({ expenditureType, amount, attachments,selectedDate,selectedGST });
+
+    res.status(200).json({ message: "Request submitted successfully" });
+  } catch (error) {
+    console.error("Error submitting request:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// Function to send email with attachment
+async function sendEmailNotification({ expenditureType, amount, attachments,selectedDate,selectedGST }) {
+  // Create transporter
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: 'bablysingh2409@gmail.com', // your email address
+      pass: smtpPassword, // your email password
+    },
+  });
+  // Read the file content
+  // const fileContent = fs.readFileSync(attachment.path);
+
+  // Prepare attachments array
+  const attachmentsArray = attachments.map(file => ({
+    filename: file.originalname,
+    content: fs.readFileSync(file.path),
+  }));
+
+
+  // Email content
+  const mailOptions = {
+    from: 'bablysingh2409@gmail.com', // your email address
+    to: 'bablysingh2409@gmail.com', //  recipient's email address
+    subject: "Receipt",
+    text: `Date: ${selectedDate}\nExpenditure Type: ${expenditureType}\nAmount: ${amount}\n and ${selectedGST}`,
+    // attachments:attachment
+    // attachments: [
+    //   {
+    //     filename: attachment.originalname,
+    //     // content: attachment.path, 
+    //     content: fileContent,
+    //     // contentType: 'application/pdf'
+    //   },
+    // ],
+    attachments: attachmentsArray,
+  };
+
+  // Send email
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error("Error sending email:", error);
+    } else {
+      console.log("Email sent:", info.response);
+    }
+  });
+}
+
+module.exports = router;
