@@ -8,7 +8,7 @@ const multer = require("multer");
 app.use(cors());
 app.use(express.json());
 
-const PORT = process.env.PORT || 3000;
+// const PORT = process.env.PORT || 3000;
 
 mongoose.connect("mongodb://localhost:27017/email-collection", {
   useNewUrlParser: true,
@@ -20,5 +20,5 @@ app.use("/", emailSend);
 
 // Start the server
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:3000`);
 });
