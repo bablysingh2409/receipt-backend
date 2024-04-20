@@ -34,6 +34,8 @@ async function sendEmailNotification({ expenditureType, amount, attachments,sele
   // Create transporter
   const transporter = nodemailer.createTransport({
     service: "gmail",
+    host: 'smtp.gmail.com',
+    port: 587,
     auth: {
       user: 'bablysingh2409@gmail.com', // your email address
       pass: smtpPassword, // your email password

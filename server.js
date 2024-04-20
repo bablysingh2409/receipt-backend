@@ -23,5 +23,5 @@ app.use("/", emailSend);
 //   console.log(`Server is running on http://localhost:3000`);
 // });
 app.listen(5500,()=>{
-  console.log('server is running on 5000');
+  console.log('server is running on 5500');
 })
